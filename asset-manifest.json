@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/mechancial_web/static/css/main.b6d274c6.css",
+    "main.js": "/mechancial_web/static/js/main.724785ea.js",
+    "static/js/787.71e672d5.chunk.js": "/mechancial_web/static/js/787.71e672d5.chunk.js",
+    "static/media/Fulkit.jpg": "/mechancial_web/static/media/Fulkit.217876379e94192e2f7a.jpg",
+    "index.html": "/mechancial_web/index.html",
+    "main.b6d274c6.css.map": "/mechancial_web/static/css/main.b6d274c6.css.map",
+    "main.724785ea.js.map": "/mechancial_web/static/js/main.724785ea.js.map",
+    "787.71e672d5.chunk.js.map": "/mechancial_web/static/js/787.71e672d5.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b6d274c6.css",
+    "static/js/main.724785ea.js"
+  ]
+}
