@@ -9,7 +9,7 @@ function Profile(){
     useEffect(()=>{
         setTimeout(()=>{
             setIsLoading(false);
-        },2000)
+        },300)
     })
     const navigate = useNavigate();
     const [kondisi, setKondisi] = useState('order');
@@ -91,7 +91,7 @@ function Order(){
             const response2 = await axios.get(`${url}/getOrder`);
             setDataProduk(response.data);
             setDataOrder(response1.data);
-            setDataOrderDetail(response2);
+            setDataOrderDetail(response2.data);
             setIsLoading(false);
           } catch (error) {
             console.error(error);
