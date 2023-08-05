@@ -602,7 +602,7 @@ const Order = () =>{
       formData.append("Id_Order",id_order);
       formData.append("Prev_Image",filteredPhoto(id_order)[0].dataImage);
       try{
-        await axios.post(`${url}/api/upload`,formData);
+        await axios.post(`http://34.101.130.175:5000/api/upload`,formData);
         console.log('Image uploaded successfully!');
         window.location.reload();
       } catch(error){
