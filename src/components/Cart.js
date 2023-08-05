@@ -458,6 +458,7 @@ const Checkout =() =>{
 }
 
 const Order = () =>{
+  const [dataProduk, setDataProduk] = useState([]);
   let { id_order } = useParams();
   const [image,setImage] = useState('');
   const [noresi, setNoresi] = useState("");
@@ -471,15 +472,26 @@ const Order = () =>{
   const[isLoading, setIsLoading] = useState(true);
   const dataOrder = GetId_Order();
   const dataOrderDetail = GetOrderDetail();
-  const dataProduk = GetProduk();
   const dataUser = GetUser();
   let status;
   let title;
   let total_belanja =0;
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${url}/produk`);
+        setDataProduk(response.data);
+        setIsLoading(false);
+      } catch (error) {
+        console.error(error);
+        setIsLoading(false);
+      }
+    };
 
-  setTimeout(() =>{
-    setIsLoading(false);
-},300)
+    fetchData();
+  }, []);
+  
+  
 
   useEffect(() => {
     if (dataOrder.length>0 && !noresi && !kurir && !notes && !ongkir) {

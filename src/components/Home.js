@@ -1,7 +1,8 @@
 import React, {useEffect, useState}from "react"
 import { Card, Image, Col, Row, Container } from "react-bootstrap";
 import { Link} from "react-router-dom";
-import { GetProduk,highlight} from "./global";
+import { GetProduk,highlight,url} from "./global";
+import axios from "axios";
 function Home(){
     
 
@@ -18,14 +19,22 @@ function Home(){
 }
 function Cards(kategori){
     const [isLoading, setIsLoading] = useState(true);
-    const dataProduk = GetProduk();
+    const [dataProduk, setDataProduk] = useState([]);
     
     useEffect(() => {
-        // Simulate an asynchronous operation (e.g., fetching data)
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 2000); // Replace this with your actual asynchronous operation
-      }, []);
+        const fetchData = async () => {
+          try {
+            const response = await axios.get(`${url}/produk`);
+            setDataProduk(response.data);
+            setIsLoading(false);
+          } catch (error) {
+            console.error(error);
+            setIsLoading(false);
+          }
+        };
+    
+        fetchData();
+      }, []); // Replace this with your actual asynchronous operation
     if (isLoading) {
      return (
        <div className="spinner-container">

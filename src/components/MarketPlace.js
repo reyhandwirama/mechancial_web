@@ -1,7 +1,8 @@
 import { Nav, Container, Navbar, Row, Col, Card, Image } from "react-bootstrap";
 import { useParams, Link} from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import { GetProduk, setLocalStorageWithTimeout,highlight} from "./global";
+import { url, setLocalStorageWithTimeout,highlight} from "./global";
+import axios from "axios";
 
 function Navigation() {
   return (
@@ -26,16 +27,26 @@ function Navigation() {
 function Item() {
   const [isLoading, setIsLoading] = useState(true);
   let { category } = useParams();
-  const dataProduk = GetProduk();
+  const [dataProduk, setDataProduk] = useState([]);
   if (category === undefined) {
     category = "fullkit";
   }
-  useEffect(() => {
-    // Simulate an asynchronous operation (e.g., fetching data)
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000); // Replace this with your actual asynchronous operation
-  }, []);
+  
+    
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const response = await axios.get(`${url}/produk`);
+            setDataProduk(response.data);
+            setIsLoading(false);
+          } catch (error) {
+            console.error(error);
+            setIsLoading(false);
+          }
+        };
+    
+        fetchData();
+      }, []);
 
   if (isLoading) {
     return (

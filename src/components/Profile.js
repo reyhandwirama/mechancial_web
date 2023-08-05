@@ -5,6 +5,12 @@ import { Link,useNavigate, Navigate} from "react-router-dom";
 import axios from "axios";
 function Profile(){
     setLocalStorageWithTimeout();
+    const [isLoading, setIsLoading] = useState(true);
+    useEffect(()=>{
+        setTimeout(()=>{
+            setIsLoading(false);
+        },300)
+    })
     const data = JSON.parse(localStorage.getItem("user"));
     const navigate = useNavigate();
     const [kondisi, setKondisi] = useState('order');
@@ -18,6 +24,13 @@ function Profile(){
         window.location.reload();
         
     }
+    if (isLoading) {
+        return (
+          <div className="spinner-container">
+          <div className="loading-spinner"></div>
+        </div>
+        )
+     }
     if(!userData){
         return <Navigate to={"/profile/login"}/>
     }
@@ -65,14 +78,30 @@ function Order(){
     const navigate = useNavigate();
     const[isLoading, setIsLoading] = useState(true);
     const dataUser = GetData();
-    const dataOrder = GetId_Order();
-    const dataOrderDetail = GetOrderDetail();
-    const dataProduk = GetProduk()  ;
+    const [dataProduk, setDataProduk] = useState([]);
+    const [dataOrder, setDataOrder] = useState([]);
+    const [dataOrderDetail, setDataOrderDetail] = useState([]);
     const [showWarning, setShowWarning] = useState(false);
     const [idOrder, setIdOrder] = useState('');
-    setTimeout(() =>{
+
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const response = await axios.get(`${url}/produk`);
+            const response1 = await axios.get(`${url}/getId_Order`);
+            const response2 = await axios.get(`${url}/getOrder`);
+            setDataProduk(response.data);
+            setDataOrder(response1.data);
+            setDataOrderDetail(response2);
             setIsLoading(false);
-    },2000)
+          } catch (error) {
+            console.error(error);
+            setIsLoading(false);
+          }
+        };
+    
+        fetchData();
+      }, []);
 
     setTimeout(()=>{
         window.location.reload();
