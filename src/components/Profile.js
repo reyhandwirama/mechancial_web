@@ -72,7 +72,7 @@ function Order(){
     const [idOrder, setIdOrder] = useState('');
     setTimeout(() =>{
             setIsLoading(false);
-    },300)
+    },2000)
 
     setTimeout(()=>{
         window.location.reload();
