@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const url = "https://fine-teal-piglet-garb.cyclic.app/";
+const url = "https://good-lime-cape-buffalo-garb.cyclic.app/";
 const userData = JSON.parse(localStorage.getItem("user"));
 const boolUser = !!localStorage.getItem('user');
 
