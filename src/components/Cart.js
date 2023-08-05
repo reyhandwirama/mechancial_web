@@ -216,16 +216,17 @@ function ButtonIncreaseCart({value}){
   
   const increment = () => {
     setCount((prevCount) => prevCount + 1);
-    submitData(count, value[1], value[2]);
+    submitData(count+1, value[1], value[2]);
   };
 
   
   const decrement = () => {
-    if (count <= 1) {
+    console.log(count);
+    if (count < 1) {
       setShowWarning(true);
     } else {
       setCount((prevCount) => prevCount - 1);
-      submitData(count, value[1], value[2]);
+      submitData(count-1, value[1], value[2]);
     }
   };
   
@@ -458,7 +459,11 @@ const Checkout =() =>{
 }
 
 const Order = () =>{
+  const[isLoading, setIsLoading] = useState(true);
   const [dataProduk, setDataProduk] = useState([]);
+  const [dataOrder, setDataOrder] = useState([]);
+  const [dataOrderDetail, setDataOrderDetail] = useState([]);
+
   let { id_order } = useParams();
   const [image,setImage] = useState('');
   const [noresi, setNoresi] = useState("");
@@ -469,26 +474,28 @@ const Order = () =>{
   const navigate = useNavigate();
   const [showWarning, setShowWarning] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
-  const[isLoading, setIsLoading] = useState(true);
-  const dataOrder = GetId_Order();
-  const dataOrderDetail = GetOrderDetail();
   const dataUser = GetUser();
   let status;
   let title;
   let total_belanja =0;
   useEffect(() => {
+    setTimeout(()=>{
     const fetchData = async () => {
       try {
         const response = await axios.get(`${url}/produk`);
+        const response1 = await axios.get(`${url}/getId_Order`);
+        const response2 = await axios.get(`${url}/getOrder`);
         setDataProduk(response.data);
+        setDataOrder(response1.data);
+        setDataOrderDetail(response2.data);
         setIsLoading(false);
       } catch (error) {
         console.error(error);
         setIsLoading(false);
       }
     };
-
     fetchData();
+  },100)
   }, []);
   
   
@@ -741,9 +748,9 @@ const Order = () =>{
       
       <Row style={{marginBottom:20}}>
                 <Col>
-                <Link style={{textDecoration: 'none', color:"black"}} to={`/profile`}><button className="btn btn-lg bg-warning">&laquo;</button>   </Link>
+                <Link style={{textDecoration: 'none', color:"black"}} to={`/profile/order`}><button className="btn btn-lg bg-warning">&laquo;</button>   </Link>
                 </Col>
-                {new Date(dataOrder.filter((item) => item.Id_Order === id_order)[0].batasorder).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta'}) !== "Invalid Date"&&(
+                {dataOrder.length > 0 && new Date(dataOrder.filter((item) => item.Id_Order === id_order)[0].batasorder).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta'}) !== "Invalid Date"&&(
                 <Col md={4} style={{padding:10, backgroundColor:"#f44336", color:"white", borderRadius:10}}>
                     batas Pembayaran : {new Date(dataOrder.filter((item) => item.Id_Order === id_order)[0].batasorder).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta'})} WIB
                 </Col>
@@ -852,7 +859,8 @@ const Order = () =>{
         </Row>
         ))}
         {userData && userData[0].tipe!== "admin" ?(
-        <Row>
+        <Row style={{marginTop:20}}>
+          <h4 style={{marginBottom:20}}>Upload Bukti Pembayaran</h4>
           <input type="file" name="file" accept="image/*" onChange={handleImage}/>
         </Row>
         ) : ""}

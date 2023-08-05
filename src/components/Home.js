@@ -114,7 +114,7 @@ function Content(){
                   <Col className="m-4" xs={{order:2}} md={{order:1}}>
                       <h2>Apa itu Mechanical Keyboard ?</h2>
                       <Row style={{marginTop:20}}>
-                          {teks}
+                      <Col className="col-lg-12 col-md-8 col-12">{teks}</Col>
                       </Row>
                   </Col>
                   <Col className="d-flex justify-content-end" xs={{order:1}}><Image src={"/assets/images/background1.png"} className="foto"/></Col>
@@ -166,7 +166,7 @@ function Content1(){
                   <Col className=" p-5" md={5}>
                       <h2>Tipe - Tipe Switch Mechanical Keyboard</h2>
                       <Row style={{marginTop:20}}>
-                          {teks}
+                      <Col className="col-lg-12 col-md-8 col-12">{teks}</Col>
                       </Row>
                   </Col>
                   <Col className="d-flex justify-content-center p-5">
@@ -252,7 +252,7 @@ function Content2(){
                       <h2 className="align-self-center">Layout Keyboard</h2>
                       <Row style={{marginTop:20}}>
                           <Col></Col>
-                          <Col md={8}>{teks1}</Col>
+                          <Col className="col-lg-8 col-md-8 col-12">{teks1}</Col>
                           <Col></Col>
                       </Row>
                   </Col>
@@ -275,7 +275,7 @@ function Content2(){
                   </Col>
                   <Col md={4} className="d-flex" style={{marginTop:20}} >
                       <Card className="movieImage flex-grow-1">
-                          <Image src={`/assets/images/tkl.png`} alt="Dune Movies" className="images" />
+                          <Image src={`/assets/images/TKL.png`} alt="Dune Movies" className="images" />
                           <div className="bg-dark flex-grow-1">
                               <div className="p-3  text-white">
                               <Card.Title className="text-center">TEN KEY LESS (TKL)</Card.Title>

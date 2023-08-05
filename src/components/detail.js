@@ -37,6 +37,7 @@ function Detail(){
     const handleCheckout = (item,qty) =>{
         if(userData){
         submitData(item,qty);
+        alert("Barang Berhasil Dimasukkan Ke Keranjang")
         }
         else{
             alert("Silahkan Login Terlebih Dahulu !");

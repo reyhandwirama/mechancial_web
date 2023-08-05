@@ -640,7 +640,7 @@ function FormProfile(props){
                 <div style={{marginTop:30}}>
                     <label htmlFor="password">Password</label>
                     <input
-                    type="text"
+                    type="password"
                     id="password"
                     value={password}
                     onChange={handlePasswordChange}
