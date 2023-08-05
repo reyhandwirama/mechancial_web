@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const url = "http://localhost:3001";
+const url = "https://real-pear-cocoon-gown.cyclic.app";
 let total_belanja = 0;
 const userData = JSON.parse(localStorage.getItem("user"));
 const boolUser = !!localStorage.getItem('user');
