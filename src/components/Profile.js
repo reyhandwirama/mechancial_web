@@ -9,9 +9,8 @@ function Profile(){
     useEffect(()=>{
         setTimeout(()=>{
             setIsLoading(false);
-        },300)
+        },2000)
     })
-    const data = JSON.parse(localStorage.getItem("user"));
     const navigate = useNavigate();
     const [kondisi, setKondisi] = useState('order');
     const handleKondisi = (value) =>{
@@ -35,7 +34,7 @@ function Profile(){
         return <Navigate to={"/profile/login"}/>
     }
       const handleUpdate = (username,email,notelp,password,alamat) =>{
-            updateDataProfile(data[0].Id_User,username,email,notelp,password,alamat);
+            updateDataProfile(userData[0].Id_User,username,email,notelp,password,alamat);
       }
       if (userData[0].tipe === "user"){
         return(
