@@ -866,7 +866,7 @@ const Order = () =>{
         ) : ""}
         
         <Row>
-          {filteredPhoto(id_order) &&<img alt="not found" width={"250px"} src={filteredPhoto(id_order) ? `${url}/${filteredPhoto(id_order)[0].dataImage}`:URL.createObjectURL(image)}/>}
+          {filteredPhoto(id_order) &&<img alt="belum upload foto" width={"250px"} src={filteredPhoto(id_order) ? `https://storage.googleapis.com/mechanical_keyboard/${filteredPhoto(id_order)[0].dataImage}?authuser=3/`:URL.createObjectURL(image)}/>}
           
         </Row>
         <Row className="mt-4">
