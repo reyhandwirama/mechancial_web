@@ -85,19 +85,6 @@ function Cards(kategori){
 }
 
 function Content(){
-    const [isLoading, setIsLoading] = useState(true);
-    useEffect(()=>{
-        setTimeout(() => {
-            setIsLoading(false);
-        }, 150);
-    })
-    if (isLoading) {
-        return (
-          <div className="spinner-container">
-          <div className="loading-spinner"></div>
-        </div>
-        )
-     }
   const teks = <p style={{textAlign:"justify",fontSize:"1.3rem"}}>&nbsp;&nbsp;Mechanical Keyboard adalah 
   papan ketik yang digunakan untuk mengimput data dengan menggunakan mekanisme 
   mekanik dalam merespon input dari user. 
@@ -126,19 +113,6 @@ function Content(){
 }
 
 function Content1(){
-    const [isLoading, setIsLoading] = useState(true);
-    useEffect(()=>{
-        setTimeout(() => {
-            setIsLoading(false);
-        }, 150);
-    })
-    if (isLoading) {
-        return (
-          <div className="spinner-container">
-          <div className="loading-spinner"></div>
-        </div>
-        )
-     }
   const teks = <p style={{textAlign:"justify",fontSize:"1.3rem"}}>
       &nbsp;&nbsp;Switch merupakan bagian yang berada di bawah 
       keycaps dan berfungsi untuk menekan tombol 
@@ -220,19 +194,6 @@ function Content1(){
 }
 
 function Content2(){
-    const [isLoading, setIsLoading] = useState(true);
-    useEffect(()=>{
-        setTimeout(() => {
-            setIsLoading(false);
-        }, 150);
-    })
-    if (isLoading) {
-        return (
-          <div className="spinner-container">
-          <div className="loading-spinner"></div>
-        </div>
-        )
-     }
   const teks1 = <p style={{textAlign:"justify",fontSize:"1.3rem"}}>
       &nbsp;&nbsp;&nbsp;Mechanical Keyboard memiliki berbagai macam 
       layout yang dapat digunakan sesuai dengan referensi 
