@@ -34,7 +34,7 @@ function Item() {
     // Simulate an asynchronous operation (e.g., fetching data)
     setTimeout(() => {
       setIsLoading(false);
-    }, 1000); // Replace this with your actual asynchronous operation
+    }, 2000); // Replace this with your actual asynchronous operation
   }, []);
 
   if (isLoading) {
