@@ -315,15 +315,13 @@ function Order(){
 }
 function Login(){
     const [selectedValue, setSelectedValue] = useState('Login');
-    
     const handleNavClick = (value) => {
         setSelectedValue(value);
       };
     return(
-        <Container style={{width:"50vw",
-        padding:"10px 50px 10px 50px", backgroundColor:"#F5F5F5",
+        <Container style={{padding:"10px 50px 10px 50px", backgroundColor:"#F5F5F5",
         marginTop:120, marginBottom:150, borderRadius:10, 
-        } }>
+        } } className="col-12 col-md-8 col-lg-5">
             <Row>
                 <Nav className="d-flex justify-content-center" >
                 <Nav.Link className={selectedValue === 'Login' ? 'activated' : ''} style={{color:"black"}} onClick={() => handleNavClick('Login')}>Login</Nav.Link>
