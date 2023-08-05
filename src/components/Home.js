@@ -24,7 +24,7 @@ function Cards(kategori){
         // Simulate an asynchronous operation (e.g., fetching data)
         setTimeout(() => {
           setIsLoading(false);
-        }, 300); // Replace this with your actual asynchronous operation
+        }, 1000); // Replace this with your actual asynchronous operation
       }, []);
     if (isLoading) {
      return (

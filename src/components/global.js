@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const url = "http://localhost:3001s";
-let total_belanja = 0;
+const url = "https://real-pear-cocoon-gown.cyclic.app";
 const userData = JSON.parse(localStorage.getItem("user"));
 const boolUser = !!localStorage.getItem('user');
-
 
 const GetUser = () => {
   const [dataUser, setDataUser] = useState([]);
