@@ -12,9 +12,10 @@ function Profile(){
         },300)
     })
     const navigate = useNavigate();
-    const [kondisi, setKondisi] = useState('order');
+    const [kondisi, setKondisi] = useState('profile');
     const handleKondisi = (value) =>{
         setKondisi(value)
+        
     }
     
     const handleLogout= () =>{
@@ -73,6 +74,57 @@ function Profile(){
     )}
 }
 
+function ProfileOrder(){
+    setLocalStorageWithTimeout();
+    const [isLoading, setIsLoading] = useState(true);
+    useEffect(()=>{
+        setTimeout(()=>{
+            setIsLoading(false);
+        },300)
+    })
+    const navigate = useNavigate();
+    const [kondisi, setKondisi] = useState('order');
+    const handleKondisi = (value) =>{
+        setKondisi(value)
+    }
+    
+    const handleLogout= () =>{
+        localStorage.removeItem('user');
+        navigate("/profile/login")
+        window.location.reload();
+        
+    }
+    if (isLoading) {
+        return (
+          <div className="spinner-container">
+          <div className="loading-spinner"></div>
+        </div>
+        )
+     }
+    if(!userData){
+        return <Navigate to={"/profile/login"}/>
+    }
+      const handleUpdate = (username,email,notelp,password,alamat) =>{
+            updateDataProfile(userData[0].Id_User,username,email,notelp,password,alamat);
+      }
+        return(
+            <Container style={{padding:50,backgroundColor:"#F5F5F5",marginTop:50, marginBottom:50}}>
+                <Row>
+                    <Col className="d-flex flex-column " md={3}>
+                    <button className="btn btn-lg mt-3" style={{width:"100%", backgroundColor:"#787872", color:"white",fontWeight:"bold"}} onClick={() => handleKondisi('profile')}>Update Profile</button>
+                    <button className="btn btn-lg mt-3" style={{width:"100%", backgroundColor:"#787872", color:"white",fontWeight:"bold"}} onClick={() => handleKondisi('order')}>My Order</button>
+                    <Link to={'/profile/login'}>
+                    <button className="btn btn-lg mt-3" style={{width:"100%", backgroundColor:"#f44336", color:"white",fontWeight:"bold"}} onClick={() => handleLogout()}>Log Out</button>
+                    </Link>
+                    </Col>
+                    <Col>
+                        {kondisi === "profile"?  <FormProfile value={kondisi} onChanges={handleUpdate} /> : <Order/>}
+                        
+                    </Col>
+                </Row>
+            </Container>
+        ) 
+}
 function Order(){
     const navigate = useNavigate();
     const[isLoading, setIsLoading] = useState(true);
@@ -467,9 +519,8 @@ function FormProfile(props){
           navigate('/profile/login');
         }
       }, [navigate]);
-    const data = JSON.parse(localStorage.getItem("user"));
-    const  username1 = data[0].username;
-    const password1 = data[0].password;
+    const username1 = userData[0].username;
+    const password1 = userData[0].password;
     const [data1, setData1] = useState([]);
 
     useEffect(() => {
@@ -484,16 +535,19 @@ function FormProfile(props){
             const response = await axios.post(`${url}/login`, data2);
             console.log('Data submitted successfully');
             setData1(response.data);
+            setIsLoading(false);
             // Perform any additional actions if needed
           } catch (error) {
+            setIsLoading(false);
             console.log(error);
           }
         };
         
         fetchDataFromAPI();
-        setIsLoading(false);
+        
     },300)
       }, [username1,password1]);
+
       
     const kondisi = props.value;
     const [username, setUsername] = useState("");
@@ -529,7 +583,7 @@ function FormProfile(props){
     };
 
     const handleSubmit = () => {
-        updateDataProfile(data[0].Id_User,username,email,notelp, password, alamat);
+        updateDataProfile(userData[0].Id_User,username,email,notelp, password, alamat);
     };
 
     const handleToggleReadOnly = () => {
@@ -651,4 +705,4 @@ const updateDataProfile = (id_user,username,email,notelp,password,alamat) =>{
         console.log('data gagal di update',error);
   });
 };
-export{Login, Profile}
+export{Login, Profile,ProfileOrder}

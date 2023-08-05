@@ -98,7 +98,7 @@ function Content(){
         </div>
         )
      }
-  const teks = <p style={{textAlign:"justify",textJustify:"inter-word",fontSize:"1.3rem"}}>&nbsp;&nbsp;Mechanical Keyboard adalah 
+  const teks = <p style={{textAlign:"justify",fontSize:"1.3rem"}}>&nbsp;&nbsp;Mechanical Keyboard adalah 
   papan ketik yang digunakan untuk mengimput data dengan menggunakan mekanisme 
   mekanik dalam merespon input dari user. 
   Perbedaannya dengan keyboard biasa adalah mekanismenya. 
@@ -113,7 +113,7 @@ function Content(){
               <Row className="overflow-hidden">
                   <Col className="m-4" xs={{order:2}} md={{order:1}}>
                       <h2>Apa itu Mechanical Keyboard ?</h2>
-                      <Row>
+                      <Row style={{marginTop:20}}>
                           {teks}
                       </Row>
                   </Col>
@@ -139,7 +139,7 @@ function Content1(){
         </div>
         )
      }
-  const teks = <p style={{textAlign:"justify",textJustify:"inter-word",fontSize:"1.3rem"}}>
+  const teks = <p style={{textAlign:"justify",fontSize:"1.3rem"}}>
       &nbsp;&nbsp;Switch merupakan bagian yang berada di bawah 
       keycaps dan berfungsi untuk menekan tombol 
       untuk menginput perintah. Switch terbagi menjadi 3 Tipe yaitu Linear , Tactile , dan Clicky. Pada setiap tipenya memiliki feel dan 
@@ -165,7 +165,7 @@ function Content1(){
               <Row>
                   <Col className=" p-5" md={5}>
                       <h2>Tipe - Tipe Switch Mechanical Keyboard</h2>
-                      <Row>
+                      <Row style={{marginTop:20}}>
                           {teks}
                       </Row>
                   </Col>
@@ -233,7 +233,7 @@ function Content2(){
         </div>
         )
      }
-  const teks1 = <p style={{textAlign:"justify",textJustify:"inter-word",fontSize:"1.3rem"}}>
+  const teks1 = <p style={{textAlign:"justify",fontSize:"1.3rem"}}>
       &nbsp;&nbsp;&nbsp;Mechanical Keyboard memiliki berbagai macam 
       layout yang dapat digunakan sesuai dengan referensi 
       dan kegunaannya masing masing. Contohnya penggunaan 
@@ -250,7 +250,7 @@ function Content2(){
               <Row className="p-5">
                   <Col className="m-4 d-flex flex-column" xs={{order:2}} md={{order:1}}>
                       <h2 className="align-self-center">Layout Keyboard</h2>
-                      <Row>
+                      <Row style={{marginTop:20}}>
                           <Col></Col>
                           <Col md={8}>{teks1}</Col>
                           <Col></Col>
