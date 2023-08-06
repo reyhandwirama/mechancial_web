@@ -305,7 +305,7 @@ function FormLogin(){
     const navigate = useNavigate();
     const [usernamelog, setUsernameLog] = useState('');
     const [passwordlog, setPasswordLog] = useState('');
-    const dataUser = GetUser();
+    const {dataUser} = GetUser();
 
     if(userData){
         navigate("/profile");
