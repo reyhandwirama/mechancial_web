@@ -1,7 +1,7 @@
 import { Row, Col, Container, Image, Card, Modal, Button} from "react-bootstrap"
 import React, {useState, useEffect} from "react";
 import axios from "axios";
-import { GetCart, GetIdCart, GetId_Order, GetOrderDetail, GetProduk, GetUser, boolUser, setLocalStorageWithTimeout, url, highlight } from "./global";
+import { GetIdCart,GetUser, boolUser, setLocalStorageWithTimeout, url, highlight } from "./global";
 import { useNavigate, useParams, Navigate,Link} from "react-router-dom";
 import { userData } from "./global";
 import firebase from "./firebase";
@@ -10,9 +10,29 @@ function Cart(){
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [showWarning, setShowWarning] =useState(false);
-  const dataCart = GetCart();
-  const dataProduk = GetProduk();
-  const dataUser = GetUser();
+  const [dataCart, setDataCart] = useState([]);
+  const [dataProduk, setDataProduk] = useState([]);
+  const [dataUser, setDataUser] = useState([]);
+
+  useEffect(()=>{
+      const fetchData = async() => {
+
+      try{
+        const response = await axios.get(`${url}/cart`);
+        const response1 = await axios.get(`${url}/produk`);
+        const response2 = await axios.get(`${url}/user`);
+        setDataCart(response);
+        setDataProduk(response1);
+        setDataUser(response2);
+        setIsLoading(false);
+      }
+      catch(error){
+        console.log(error);
+        setIsLoading(false);
+      }         
+    };
+    fetchData();
+  })
   GetIdCart();
   const showButton = dataCart.filter(item => item.Id_User === userData[0].Id_User).length > 0;
   let total_belanja = 0;
@@ -340,21 +360,34 @@ const ShowCheckout =() =>{
 
 const Checkout =() =>{
   const [isLoading, setIsLoading] = useState(true);
-  useEffect(() => {
-    // Simulate an asynchronous operation
-    setTimeout(() => {
-      setIsLoading(false); // Set isLoading to false after the data is loaded
-    }, 300);
-  }, []);
-
-  
   const navigate = useNavigate();
   let total_belanja = 0;
-  const dataCartDetail = GetCart();
-  const dataProduk = GetProduk();
-  const dataUser = GetUser();
+  const [dataCartDetail, setDataCartDetail] = useState([]);
+  const [dataProduk,setDataProduk] = useState([]);
+  const [dataUser, setDataUser] = useState([]);
   const [showWarning, setShowWarning] = useState(false);
 
+  useEffect(() => {
+    // Simulate an asynchronous operation
+    const fetchData = async () =>{
+      try{
+      const response = await axios.get(`${url}/cart`);
+      const response1 = await axios.get(`${url}/produk`);
+      const response2 = await axios.get(`${url}/user`);
+      setDataCartDetail(response);
+      setDataProduk(response1);
+      setDataUser(response2);
+      setIsLoading(false);
+    }
+    catch(error){
+      console.log(error)
+      setIsLoading(false);
+    }
+
+    }
+    
+    
+  }, []);
   useEffect(() => {
     if (!boolUser) {
       return <Navigate to={"/profile/login"} replace={true}/>
