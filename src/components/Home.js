@@ -1,4 +1,4 @@
-import React, {useEffect, useState}from "react"
+import React from "react"
 import { Card, Image, Col, Row, Container } from "react-bootstrap";
 import { Link} from "react-router-dom";
 import { GetProduk, highlight} from "./global";
@@ -17,22 +17,8 @@ function Home(){
     )
 }
 function Cards(kategori){
-    const [isLoading, setIsLoading] = useState(true);
-    const [dataProduk, setDataProduk] = useState([]);
+    const {dataProduk, isLoading} = GetProduk();
     
-    useEffect(() => {
-        const fetchData = async () => {
-          try {
-            setDataProduk(GetProduk());
-            setIsLoading(false);
-          } catch (error) {
-            console.error(error);
-            setIsLoading(false);
-          }
-        };
-    
-        fetchData();
-      }, []); // Replace this with your actual asynchronous operation
     if (isLoading) {
      return (
        <div className="spinner-container">

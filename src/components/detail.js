@@ -7,16 +7,9 @@ function Detail(){
     setLocalStorageWithTimeout();
     let {id_produk} = useParams();
     const [qty, setQty] = useState();
-    const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
-    const dataProduk = GetProduk() ;
+    const {dataProduk, isLoading} = GetProduk() ;
 
-    useEffect(() => {
-        // Simulate an asynchronous operation (e.g., fetching data)
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 300); // Replace this with your actual asynchronous operation
-      }, []);
     useEffect(() => {
         GetIdCart();
       }, []);

@@ -7,52 +7,58 @@ const boolUser = !!localStorage.getItem('user');
 
 const GetUser = () => {
   const [dataUser, setDataUser] = useState([]);
-
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     // Fetch data from the API using Axios
     axios.get(`${url}/user`)
       .then(response => {
         setDataUser(response.data);
+        setIsLoading(false);
       })
       .catch(error => {
         console.error(error);
+        setIsLoading(false);
       });
   }, []);
-  return dataUser;
+  return {dataUser, isLoading};
 };
 
 
 const GetId_Order = () => {
   const [dataOrder, setDataOrder] = useState([]);
-
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     // Fetch data from the API using Axios
     axios.get(`${url}/getId_Order`)
       .then(response => {
         setDataOrder(response.data);
+        setIsLoading(false);
       })
       .catch(error => {
         console.error(error);
+        setIsLoading(false);
       });
   }, []);
-  return dataOrder;
+  return {dataOrder,isLoading};
 };
 
 const GetOrderDetail = () => {
   const [dataOrderDetail, setOrderDetail] = useState([]);
-
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     // Fetch data from the API using Axios
     axios.get(`${url}/getOrder`)
       .then(response => {
         setOrderDetail(response.data);
+        setIsLoading(false);
       })
       .catch(error => {
         console.error(error);
+        setIsLoading(false);
       });
   }, []);
 
-  return dataOrderDetail;
+  return {dataOrderDetail, isLoading};
 };
 
 function setLocalStorageWithTimeout() {
@@ -80,35 +86,40 @@ const GetData = () => {
 };
 
 const GetCart = () => {
-  const [dataCart, setDataCart] = useState([]);
-
+  const [dataCartDetail, setDataCart] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     // Fetch data from the API using Axios
     axios.get(`${url}/cart`)
       .then(response => {
         setDataCart(response.data);
+        setIsLoading(false);
       })
       .catch(error => {
         console.error(error);
+        setIsLoading(false);
       });
   }, []);
-  return dataCart;
+  return {dataCartDetail, isLoading};
 };
 
 const GetProduk = () => {
   const [dataProduk, setDataProduk] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch data from the API using Axios
+  
     axios.get(`${url}/produk`)
       .then(response => {
         setDataProduk(response.data);
+        setIsLoading(false); 
       })
       .catch(error => {
         console.error(error);
+        setIsLoading(false); 
       });
   }, []);
-  return dataProduk;
+  return {dataProduk, isLoading};
 };
 
 const highlight = (text) => {

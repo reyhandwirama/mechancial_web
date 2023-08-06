@@ -8,31 +8,14 @@ import firebase from "./firebase";
 function Cart(){
   setLocalStorageWithTimeout();
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
   const [showWarning, setShowWarning] =useState(false);
-  const [dataCart, setDataCart] = useState([]);
-  const [dataProduk, setDataProduk] = useState([]);
-  const [dataUser, setDataUser] = useState([]);
+  const {dataCartDetail} = GetCart();
+  const {dataProduk,isLoading} = GetProduk();
+  const {dataUser} = GetUser();
+  const showButton = (dataCartDetail.filter(item => item.Id_User === userData[0].Id_User).length > 0);
 
-  useEffect(()=>{
-      const fetchData = async() => {
-
-      try{
-        setDataCart(GetCart());
-        setDataProduk(GetProduk());
-        setDataUser(GetUser());
-        setIsLoading(false);
-      }
-      catch(error){
-        console.log(error);
-        setIsLoading(false);
-      }         
-    };
-    fetchData();
-  },[])
   GetIdCart();
-    const showButton = (dataCart.filter(item => item.Id_User === userData[0].Id_User).length > 0);
-
+ 
   let total_belanja = 0;
 
   if(!userData || userData === null){
@@ -65,7 +48,7 @@ function Cart(){
 
     return(
         <React.Fragment>
-        {dataCart.filter(item => item.Id_Cart === userData[0].Id_Cart).map((item)=>(
+        {dataCartDetail.filter(item => item.Id_Cart === userData[0].Id_Cart).map((item)=>(
         <Container className="p-5 border-bottom border-dark border-1">
             {dataProduk.filter(item1 => item1.Id_Product === item.Id_Product).map((item1)=> (
                 <p style={{display:"none"}}>{total_belanja = total_belanja + (item.Qty * item1.price)}</p>
@@ -336,33 +319,13 @@ const ShowCheckout =() =>{
 }
 
 const Checkout =() =>{
-  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   let total_belanja = 0;
-  const [dataCartDetail, setDataCartDetail] = useState([]);
-  const [dataProduk,setDataProduk] = useState([]);
-  const [dataUser, setDataUser] = useState([]);
+  const {dataCartDetail} = GetCart();
+  const {dataProduk,isLoading} = GetProduk();
+  const {dataUser} = GetUser();
   const [showWarning, setShowWarning] = useState(false);
 
-  useEffect(() => {
-    // Simulate an asynchronous operation
-    const fetchData = async () =>{
-      try{
-      setDataCartDetail(GetCart());
-      setDataProduk(GetProduk());
-      setDataUser(GetUser());
-      setIsLoading(false);
-    }
-    catch(error){
-      console.log(error)
-      setIsLoading(false);
-    }
-
-    }
-    
-    fetchData();
-    
-  }, []);
   useEffect(() => {
     if (!boolUser) {
       return <Navigate to={"/profile/login"} replace={true}/>
@@ -398,6 +361,7 @@ const Checkout =() =>{
       </div>
       )
     }
+   
   return(
     <React.Fragment>
     <Container className="p-5" style={{transform:"scale(0.9)", backgroundColor:"#F5F5F5", borderRadius:10}}>
@@ -410,7 +374,7 @@ const Checkout =() =>{
         <Row className="p-0">
           <p><strong>{`${userData[0].username.toUpperCase()} `}</strong>{`${userData[0].notelp}`}</p>
         </Row>
-          <p>{dataUser.length>0 && dataUser.filter((item) => item.Id_User === userData[0].Id_User)[0].alamat}</p>
+          <p>{dataUser.length > 0 &&dataUser.filter((item) => item.Id_User === userData[0].Id_User)[0].alamat}</p>
 
         {dataCartDetail.filter((item) => item.Id_User === userData[0].Id_User).map((item)=> (
             <Row className="mt-1 border-bottom d-flex justify-content-end">
@@ -492,10 +456,9 @@ const Checkout =() =>{
 const Order = () =>{
   let { id_order } = useParams();
   const navigate = useNavigate();
-  const[isLoading, setIsLoading] = useState(true);
-  const [dataProduk, setDataProduk] = useState([]);
-  const [dataOrder, setDataOrder] = useState([]);
-  const [dataOrderDetail, setDataOrderDetail] = useState([]);
+  const {dataProduk} = GetProduk();
+  const {dataOrder} = GetId_Order();
+  const {dataOrderDetail, isLoading} = GetOrderDetail();
   const [noresi, setNoresi] = useState("");
   const [kurir, setKurir] = useState("");
   const [notes, setNotes] = useState("");
@@ -509,25 +472,6 @@ const Order = () =>{
   let status;
   let title;
   let total_belanja =0;
-
-  useEffect(() => {
-    setTimeout(()=>{
-    const fetchData = async () => {
-      try {
-        setDataProduk(GetProduk);
-        setDataOrder(GetId_Order);
-        setDataOrderDetail(GetOrderDetail);
-        setIsLoading(false);
-      } catch (error) {
-        console.error(error);
-        setIsLoading(false);
-      }
-    };
-    fetchData();
-  },100)
-  }, []);
-  
-  
 
   useEffect(() => {
     if (dataOrder.length>0 && !noresi && !kurir && !notes && !ongkir) {

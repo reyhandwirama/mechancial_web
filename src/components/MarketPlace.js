@@ -1,8 +1,7 @@
 import { Nav, Container, Navbar, Row, Col, Card, Image } from "react-bootstrap";
 import { useParams, Link} from "react-router-dom";
-import React, { useState, useEffect } from "react";
-import { url, setLocalStorageWithTimeout,highlight} from "./global";
-import axios from "axios";
+import React from "react";
+import { setLocalStorageWithTimeout,highlight, GetProduk} from "./global";
 
 function Navigation() {
   return (
@@ -25,28 +24,13 @@ function Navigation() {
 }
 
 function Item() {
-  const [isLoading, setIsLoading] = useState(true);
   let { category } = useParams();
-  const [dataProduk, setDataProduk] = useState([]);
+  const {dataProduk, isLoading} = GetProduk();;
   if (category === undefined) {
     category = "fullkit";
   }
   
     
-    useEffect(() => {
-        const fetchData = async () => {
-          try {
-            const response = await axios.get(`${url}/produk`);
-            setDataProduk(response.data);
-            setIsLoading(false);
-          } catch (error) {
-            console.error(error);
-            setIsLoading(false);
-          }
-        };
-    
-        fetchData();
-      }, []);
 
   if (isLoading) {
     return (

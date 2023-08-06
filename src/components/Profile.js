@@ -101,29 +101,13 @@ function ProfileOrder(){
 }
 function Order(){
     const navigate = useNavigate();
-    const[isLoading, setIsLoading] = useState(true);
-    const dataUser = GetUser();
-    const [dataProduk, setDataProduk] = useState([]);
-    const [dataOrder, setDataOrder] = useState([]);
-    const [dataOrderDetail, setDataOrderDetail] = useState([]);
+    const {dataUser} = GetUser();
+    const {dataProduk} = GetProduk();
+    const {dataOrder} = GetId_Order();
+    const {dataOrderDetail, isLoading} = GetOrderDetail();
     const [showWarning, setShowWarning] = useState(false);
     const [idOrder, setIdOrder] = useState('');
 
-    useEffect(() => {
-        const fetchData = async () => {
-          try {
-            setDataProduk(GetProduk());
-            setDataOrder(GetId_Order());
-            setDataOrderDetail(GetOrderDetail());
-            setIsLoading(false);
-          } catch (error) {
-            console.error(error);
-            setIsLoading(false);
-          }
-        };
-    
-        fetchData();
-      }, []);
 
     setTimeout(()=>{
         window.location.reload();
