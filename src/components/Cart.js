@@ -21,9 +21,9 @@ function Cart(){
         const response = await axios.get(`${url}/cart`);
         const response1 = await axios.get(`${url}/produk`);
         const response2 = await axios.get(`${url}/user`);
-        setDataCart(response);
-        setDataProduk(response1);
-        setDataUser(response2);
+        setDataCart(response.data);
+        setDataProduk(response1.data);
+        setDataUser(response2.data);
         setIsLoading(false);
       }
       catch(error){
@@ -32,16 +32,11 @@ function Cart(){
       }         
     };
     fetchData();
-  })
+  },[])
   GetIdCart();
-  const showButton = dataCart.filter(item => item.Id_User === userData[0].Id_User).length > 0;
+    const showButton = (dataCart.filter(item => item.Id_User === userData[0].Id_User).length > 0);
+
   let total_belanja = 0;
-  useEffect(() => {
-    // Simulate an asynchronous operation (e.g., fetching data)
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 300); // Replace this with your actual asynchronous operation
-  }, []);
 
   if(!userData || userData === null){
     return <Navigate replace={true} to='/profile/login' />
@@ -334,22 +329,7 @@ const submitRemove  = (user, produk) =>{
 };
 
 const ShowCheckout =() =>{
-  const [isLoading, setIsLoading] = useState(true);
-  useEffect(() => {
-    // Simulate an asynchronous operation
-    setTimeout(() => {
-      setIsLoading(false); // Set isLoading to false after the data is loaded
-    }, 300);
-  }, []);
 
-    
-  if (isLoading) {
-    return (
-      <div className="spinner-container">
-      <div className="loading-spinner"></div>
-    </div>
-    )
-  }
 
   return(
     <React.Fragment>
@@ -374,9 +354,9 @@ const Checkout =() =>{
       const response = await axios.get(`${url}/cart`);
       const response1 = await axios.get(`${url}/produk`);
       const response2 = await axios.get(`${url}/user`);
-      setDataCartDetail(response);
-      setDataProduk(response1);
-      setDataUser(response2);
+      setDataCartDetail(response.data);
+      setDataProduk(response1.data);
+      setDataUser(response2.data);
       setIsLoading(false);
     }
     catch(error){
@@ -386,6 +366,7 @@ const Checkout =() =>{
 
     }
     
+    fetchData();
     
   }, []);
   useEffect(() => {
