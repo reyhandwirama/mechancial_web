@@ -603,9 +603,7 @@ const Order = () =>{
       try{
         if(filteredPhoto(id_order)[0].dataImage !== "" || filteredPhoto(id_order)[0].dataImage !== null){
           try{
-
-          
-          const storageRef1 = firebase.storage().refFromURL(image);
+          const storageRef1 = firebase.storage().refFromURL(prev_image);
           await storageRef1.delete();
         } catch(error){
           console.log(error);
