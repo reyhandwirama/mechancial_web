@@ -887,7 +887,7 @@ const Order = () =>{
         ) : ""}
         
         <Row>
-          {filteredPhoto(id_order) &&<img alt="belum upload foto" style={{width:250,height:250}} src={filteredPhoto(id_order) ? `${dataOrder.filter((item) => item.Id_Order === id_order)[0].dataImage}`:URL.createObjectURL(image)}/>}
+          {filteredPhoto(id_order) &&<img alt="belum upload foto" style={{width:700,height:700}} src={filteredPhoto(id_order) ? `${dataOrder.filter((item) => item.Id_Order === id_order)[0].dataImage}`:URL.createObjectURL(image)}/>}
           
         </Row>
         <Row className="mt-4">
