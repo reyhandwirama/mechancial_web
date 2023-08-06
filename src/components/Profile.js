@@ -1,6 +1,6 @@
 import { Container, Row,Col, Nav,Card, Image, Form, Modal, Button} from "react-bootstrap";
 import { useState, React, useEffect,useRef } from "react";
-import { boolUser,GetData,GetId_Order,GetOrderDetail,GetProduk,GetUser,highlight,setLocalStorageWithTimeout, url, userData } from "./global";
+import { GetId_Order, GetOrderDetail,GetUser, GetProduk, boolUser,highlight,setLocalStorageWithTimeout, url, userData } from "./global";
 import { Link,useNavigate, Navigate} from "react-router-dom";
 import axios from "axios";
 function Profile(){
@@ -102,7 +102,7 @@ function ProfileOrder(){
 function Order(){
     const navigate = useNavigate();
     const[isLoading, setIsLoading] = useState(true);
-    const dataUser = GetData();
+    const dataUser = GetUser();
     const [dataProduk, setDataProduk] = useState([]);
     const [dataOrder, setDataOrder] = useState([]);
     const [dataOrderDetail, setDataOrderDetail] = useState([]);
@@ -112,12 +112,9 @@ function Order(){
     useEffect(() => {
         const fetchData = async () => {
           try {
-            const response = await axios.get(`${url}/produk`);
-            const response1 = await axios.get(`${url}/getId_Order`);
-            const response2 = await axios.get(`${url}/getOrder`);
-            setDataProduk(response.data);
-            setDataOrder(response1.data);
-            setDataOrderDetail(response2.data);
+            setDataProduk(GetProduk());
+            setDataOrder(GetId_Order());
+            setDataOrderDetail(GetOrderDetail());
             setIsLoading(false);
           } catch (error) {
             console.error(error);

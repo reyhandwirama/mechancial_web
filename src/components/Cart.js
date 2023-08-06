@@ -1,7 +1,7 @@
 import { Row, Col, Container, Image, Card, Modal, Button} from "react-bootstrap"
 import React, {useState, useEffect} from "react";
 import axios from "axios";
-import { GetIdCart,GetUser, boolUser, setLocalStorageWithTimeout, url, highlight } from "./global";
+import { boolUser,GetIdCart, setLocalStorageWithTimeout, url, highlight, GetUser, GetProduk, GetCart, GetId_Order, GetOrderDetail } from "./global";
 import { useNavigate, useParams, Navigate,Link} from "react-router-dom";
 import { userData } from "./global";
 import firebase from "./firebase";
@@ -18,12 +18,9 @@ function Cart(){
       const fetchData = async() => {
 
       try{
-        const response = await axios.get(`${url}/cart`);
-        const response1 = await axios.get(`${url}/produk`);
-        const response2 = await axios.get(`${url}/user`);
-        setDataCart(response.data);
-        setDataProduk(response1.data);
-        setDataUser(response2.data);
+        setDataCart(GetCart());
+        setDataProduk(GetProduk());
+        setDataUser(GetUser());
         setIsLoading(false);
       }
       catch(error){
@@ -351,12 +348,9 @@ const Checkout =() =>{
     // Simulate an asynchronous operation
     const fetchData = async () =>{
       try{
-      const response = await axios.get(`${url}/cart`);
-      const response1 = await axios.get(`${url}/produk`);
-      const response2 = await axios.get(`${url}/user`);
-      setDataCartDetail(response.data);
-      setDataProduk(response1.data);
-      setDataUser(response2.data);
+      setDataCartDetail(GetCart());
+      setDataProduk(GetProduk());
+      setDataUser(GetUser());
       setIsLoading(false);
     }
     catch(error){
@@ -520,12 +514,9 @@ const Order = () =>{
     setTimeout(()=>{
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${url}/produk`);
-        const response1 = await axios.get(`${url}/getId_Order`);
-        const response2 = await axios.get(`${url}/getOrder`);
-        setDataProduk(response.data);
-        setDataOrder(response1.data);
-        setDataOrderDetail(response2.data);
+        setDataProduk(GetProduk);
+        setDataOrder(GetId_Order);
+        setDataOrderDetail(GetOrderDetail);
         setIsLoading(false);
       } catch (error) {
         console.error(error);

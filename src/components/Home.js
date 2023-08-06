@@ -1,8 +1,7 @@
 import React, {useEffect, useState}from "react"
 import { Card, Image, Col, Row, Container } from "react-bootstrap";
 import { Link} from "react-router-dom";
-import { highlight,url} from "./global";
-import axios from "axios";
+import { GetProduk, highlight} from "./global";
 function Home(){
     
 
@@ -24,8 +23,7 @@ function Cards(kategori){
     useEffect(() => {
         const fetchData = async () => {
           try {
-            const response = await axios.get(`${url}/produk`);
-            setDataProduk(response.data);
+            setDataProduk(GetProduk());
             setIsLoading(false);
           } catch (error) {
             console.error(error);

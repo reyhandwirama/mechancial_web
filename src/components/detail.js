@@ -2,14 +2,14 @@ import { Container, Row, Col , Image } from "react-bootstrap"
 import { ButtonIncrease } from "./Cart";
 import React, {useState, useEffect} from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { GetIdCart,GetProduk,setLocalStorageWithTimeout, highlight,userData,deskripsi, submitData} from "./global";
+import { GetIdCart,setLocalStorageWithTimeout, highlight,userData,deskripsi, submitData, GetProduk} from "./global";
 function Detail(){
     setLocalStorageWithTimeout();
     let {id_produk} = useParams();
     const [qty, setQty] = useState();
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
-    const dataProduk = GetProduk();
+    const dataProduk = GetProduk() ;
 
     useEffect(() => {
         // Simulate an asynchronous operation (e.g., fetching data)
