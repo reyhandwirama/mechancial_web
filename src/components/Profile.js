@@ -5,12 +5,6 @@ import { Link,useNavigate, Navigate} from "react-router-dom";
 import axios from "axios";
 function Profile(){
     setLocalStorageWithTimeout();
-    const [isLoading, setIsLoading] = useState(true);
-    useEffect(()=>{
-        setTimeout(()=>{
-            setIsLoading(false);
-        },300)
-    })
     const navigate = useNavigate();
     const [kondisi, setKondisi] = useState('profile');
     const handleKondisi = (value) =>{
@@ -24,13 +18,6 @@ function Profile(){
         window.location.reload();
         
     }
-    if (isLoading) {
-        return (
-          <div className="spinner-container">
-          <div className="loading-spinner"></div>
-        </div>
-        )
-     }
     if(!userData){
         return <Navigate to={"/profile/login"}/>
     }
@@ -76,12 +63,6 @@ function Profile(){
 
 function ProfileOrder(){
     setLocalStorageWithTimeout();
-    const [isLoading, setIsLoading] = useState(true);
-    useEffect(()=>{
-        setTimeout(()=>{
-            setIsLoading(false);
-        },300)
-    })
     const navigate = useNavigate();
     const [kondisi, setKondisi] = useState('order');
     const handleKondisi = (value) =>{
@@ -94,13 +75,6 @@ function ProfileOrder(){
         window.location.reload();
         
     }
-    if (isLoading) {
-        return (
-          <div className="spinner-container">
-          <div className="loading-spinner"></div>
-        </div>
-        )
-     }
     if(!userData){
         return <Navigate to={"/profile/login"}/>
     }
@@ -206,7 +180,7 @@ function Order(){
           console.log("gagal remove");
         })
     
-        navigate("/profile")
+        navigate("/profile/order")
         window.location.reload();
       }
     

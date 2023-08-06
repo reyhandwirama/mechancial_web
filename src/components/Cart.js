@@ -4,6 +4,7 @@ import axios from "axios";
 import { GetCart, GetIdCart, GetId_Order, GetOrderDetail, GetProduk, GetUser, boolUser, setLocalStorageWithTimeout, url, highlight } from "./global";
 import { useNavigate, useParams, Navigate,Link} from "react-router-dom";
 import { userData } from "./global";
+import firebase from "./firebase";
 function Cart(){
   setLocalStorageWithTimeout();
   const navigate = useNavigate();
@@ -222,7 +223,7 @@ function ButtonIncreaseCart({value}){
   
   const decrement = () => {
     console.log(count);
-    if (count < 1) {
+    if (count <= 1) {
       setShowWarning(true);
     } else {
       setCount((prevCount) => prevCount - 1);
@@ -354,7 +355,7 @@ const Checkout =() =>{
         dataCartDetail.filter((item) => item.Id_User === userData[0].Id_User ).map((item) =>(
           submitOrder(id_order,userData[0].Id_User,item.Id_Product,item.Qty,props)
         ));
-        navigate("/profile")
+        navigate("/profile/order")
         window.location.reload();
     }
 
@@ -459,25 +460,26 @@ const Checkout =() =>{
 }
 
 const Order = () =>{
+  let { id_order } = useParams();
+  const navigate = useNavigate();
   const[isLoading, setIsLoading] = useState(true);
   const [dataProduk, setDataProduk] = useState([]);
   const [dataOrder, setDataOrder] = useState([]);
   const [dataOrderDetail, setDataOrderDetail] = useState([]);
-
-  let { id_order } = useParams();
-  const [image,setImage] = useState('');
   const [noresi, setNoresi] = useState("");
   const [kurir, setKurir] = useState("");
   const [notes, setNotes] = useState("");
   const [ongkir, setOngkir] = useState();
   const [batasorder,setBatasOrder] = useState("");
-  const navigate = useNavigate();
   const [showWarning, setShowWarning] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
+  const [image, setImage] = useState();
+  const [prev_image, setPrev_Image] = useState();
   const dataUser = GetUser();
   let status;
   let title;
   let total_belanja =0;
+
   useEffect(() => {
     setTimeout(()=>{
     const fetchData = async () => {
@@ -506,6 +508,7 @@ const Order = () =>{
       setKurir(dataOrder.filter((item) => item.Id_Order === id_order)[0].kurir);
       setNotes(dataOrder.filter((item) => item.Id_Order === id_order)[0].status);
       setOngkir(dataOrder.filter((item) => item.Id_Order === id_order)[0].ongkir);
+      setPrev_Image(dataOrder.filter((item) => item.Id_Order === id_order)[0].dataImage);
     }
   },[dataOrder, noresi,id_order,kurir,notes,ongkir]);
 
@@ -597,16 +600,36 @@ const Order = () =>{
       return;
     }
     else{
-      const formData = new FormData();
-      formData.append('image',image);
-      formData.append("Id_Order",id_order);
-      formData.append("Prev_Image",filteredPhoto(id_order)[0].dataImage);
       try{
-        await axios.post(`${url}/api/upload`,formData);
-        console.log('Image uploaded successfully!');
-        window.location.reload();
-      } catch(error){
-        console.error('Error uploading the image',error);
+        if(filteredPhoto(id_order)[0].dataImage !== "" || filteredPhoto(id_order)[0].dataImage !== null){
+          try{
+
+          
+          const storageRef1 = firebase.storage().refFromURL(image);
+          await storageRef1.delete();
+        } catch(error){
+          console.log(error);
+        }
+        }
+        const filename = `photo_${Date.now()}.jpg`;
+        const storageRef = firebase.storage().ref();
+        const imageRef = storageRef.child(`images/${filename}`);
+        await imageRef.put(image);
+        const imageUrl = await imageRef.getDownloadURL();
+        const data = {
+          Id_Order: id_order,
+          Prev_Image:imageUrl,
+        }
+        try{
+          await axios.post(`${url}/api/upload`,data);
+          console.log('Image uploaded successfully!');
+          window.location.reload();
+        } catch(error){
+          console.error('Error uploading the image',error);
+        } } 
+      catch(error){
+        console.error('Error uploading image:', error);
+        throw error;
       }
     }
   }
@@ -659,7 +682,7 @@ const Order = () =>{
   }
 
   const handleCloseInfo = () =>{
-    navigate('/profile');
+    navigate('/profile/order');
   }
 
 
@@ -714,7 +737,7 @@ const Order = () =>{
 
   if(notes === "Proses Ongkir"){
     title = "Pesanan sedang dalam proses penghitungan ongkir !"
-    status = "Dimohon tunggu untuk perubahan status menjadi belum dibayar !";
+    status = "Dimohon tunggu untuk perubahan status menjadi belum dibayar!";
   }
   else if(notes === "Alamat Tidak Lengkap"){
     title ="Alamat yang diinput tidak lengkap !"
@@ -866,7 +889,7 @@ const Order = () =>{
         ) : ""}
         
         <Row>
-          {filteredPhoto(id_order) &&<img alt="belum upload foto" width={"250px"} src={filteredPhoto(id_order) ? `https://storage.googleapis.com/mechanical_keyboard/${filteredPhoto(id_order)[0].dataImage}?authuser=3/`:URL.createObjectURL(image)}/>}
+          {filteredPhoto(id_order) &&<img alt="belum upload foto" width={"250px"} src={filteredPhoto(id_order) ? `${dataOrder.filter((item) => item.Id_Order === id_order)[0].dataImage}`:URL.createObjectURL(image)}/>}
           
         </Row>
         <Row className="mt-4">
@@ -917,7 +940,6 @@ const submitOrder  = (id_order,id_user,id_product,qty,props) =>{
       Ttl_Belanja: props,
 
   };
-  console.log(data);
   axios.post(`${url}/order`, data)
   .then(response => {
       console.log('Data submitted successfully');
