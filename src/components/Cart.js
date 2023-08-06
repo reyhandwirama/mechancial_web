@@ -322,9 +322,15 @@ const ShowCheckout =() =>{
     }, 300);
   }, []);
 
+    
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="spinner-container">
+      <div className="loading-spinner"></div>
+    </div>
+    )
   }
+
   return(
     <React.Fragment>
     <Checkout/>
@@ -333,6 +339,15 @@ const ShowCheckout =() =>{
 }
 
 const Checkout =() =>{
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    // Simulate an asynchronous operation
+    setTimeout(() => {
+      setIsLoading(false); // Set isLoading to false after the data is loaded
+    }, 300);
+  }, []);
+
+  
   const navigate = useNavigate();
   let total_belanja = 0;
   const dataCartDetail = GetCart();
@@ -368,6 +383,13 @@ const Checkout =() =>{
     }
 
 
+    if (isLoading) {
+      return (
+        <div className="spinner-container">
+        <div className="loading-spinner"></div>
+      </div>
+      )
+    }
   return(
     <React.Fragment>
     <Container className="p-5" style={{transform:"scale(0.9)", backgroundColor:"#F5F5F5", borderRadius:10}}>
