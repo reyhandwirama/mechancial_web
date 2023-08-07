@@ -537,7 +537,7 @@ function FormProfile(props){
 
     const handleSubmit = () => {
         updateDataProfile(userData[0].Id_User,username,email,notelp, password, alamat);
-        navigate('/profile');
+        navigate('/profile')
     };
 
     const handleToggleReadOnly = () => {
