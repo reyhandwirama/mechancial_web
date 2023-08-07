@@ -810,7 +810,18 @@ const Order = () =>{
                       <Container fluid className="d-flex justify-content-end mt-5">
                           <div className="d-flex align-items-center flex-column">
                           <h4><strong>Total Belanja</strong></h4>
-                          <h4>{`Rp ${dataOrderDetail.length >0 && (dataOrderDetail.filter((item)=>item.Id_Order === id_order)[0].Ttl_Belanja + dataOrder.filter((item) => item.Id_Order === id_order)[0].ongkir).toLocaleString()}`}</h4>
+                          <h4>{`Rp ${
+                          !isLoading
+                            ? (
+                                (
+                                  dataOrderDetail.find((item) => item.Id_Order === id_order)?.Ttl_Belanja || 0
+                                ) + (
+                                  dataOrder.find((item) => item.Id_Order === id_order)?.ongkir || 0
+                                )
+                              ).toLocaleString()
+                            : ""
+                          }`
+                        }</h4>
                           </div>
                       </Container>
                     </Col>

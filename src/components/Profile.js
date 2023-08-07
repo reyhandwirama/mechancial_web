@@ -101,14 +101,14 @@ function ProfileOrder(){
 }
 function Order(){
     const navigate = useNavigate();
-    const {dataUser} = GetUser();
+    const {dataUser, isLoading} = GetUser();
     const {dataProduk} = GetProduk();
     const {dataOrder} = GetId_Order();
-    const {dataOrderDetail, isLoading} = GetOrderDetail();
+    const {dataOrderDetail} = GetOrderDetail();
     const [showWarning, setShowWarning] = useState(false);
     const [idOrder, setIdOrder] = useState('');
 
-
+    
     setTimeout(()=>{
         window.location.reload();
     },120000)
@@ -537,6 +537,7 @@ function FormProfile(props){
 
     const handleSubmit = () => {
         updateDataProfile(userData[0].Id_User,username,email,notelp, password, alamat);
+        navigate('/profile');
     };
 
     const handleToggleReadOnly = () => {
