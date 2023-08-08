@@ -1,10 +1,10 @@
 import React from "react"
 import { Card, Image, Col, Row, Container } from "react-bootstrap";
 import { Link} from "react-router-dom";
-import { GetProduk, highlight} from "./global";
+import { GetProduk, highlight, url} from "./global";
 function Home(){
     
-
+    console.log(url);
     return (
       <React.Fragment>
       <Cards category={"fullkit"}/>
@@ -18,7 +18,6 @@ function Home(){
 }
 function Cards(kategori){
     const {dataProduk, isLoading} = GetProduk();
-    
     if (isLoading) {
      return (
        <div className="spinner-container">

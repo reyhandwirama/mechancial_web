@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-
-const url = "http://localhost:5000";
+require('dotenv').config();
+const url = process.env.URL;
 const userData = JSON.parse(localStorage.getItem("user"));
 const boolUser = !!localStorage.getItem('user');
 
