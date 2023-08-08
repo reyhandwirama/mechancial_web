@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-require('dotenv').config();
-const url = process.env.URL;
+
+const url = "https://delightful-lamb-jodhpurs.cyclic.app";
 const userData = JSON.parse(localStorage.getItem("user"));
 const boolUser = !!localStorage.getItem('user');
 
