@@ -9,8 +9,8 @@ function Cart(){
   setLocalStorageWithTimeout();
   const navigate = useNavigate();
   const [showWarning, setShowWarning] =useState(false);
-  const {dataCartDetail} = GetCart();
-  const {dataProduk,isLoading} = GetProduk();
+  const {dataCartDetail,isLoading} = GetCart();
+  const {dataProduk} = GetProduk();
   const {dataUser} = GetUser();
   const showButton = (dataCartDetail.filter(item => item.Id_User === userData[0].Id_User).length > 0);
 

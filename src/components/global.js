@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const url = "https://delightful-lamb-jodhpurs.cyclic.app";
+const url = "http://localhost:5000";
 const userData = JSON.parse(localStorage.getItem("user"));
 const boolUser = !!localStorage.getItem('user');
+
 
 const GetUser = () => {
   const [dataUser, setDataUser] = useState([]);
@@ -108,19 +109,27 @@ const GetProduk = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-  
+    const cachedata = localStorage.getItem("produk");
+    if (cachedata){
+      setDataProduk(JSON.parse(cachedata));
+      setIsLoading(false); 
+    }
+    else{
     axios.get(`${url}/produk`)
       .then(response => {
         setDataProduk(response.data);
+        localStorage.setItem('produk', JSON.stringify(response.data));
         setIsLoading(false); 
       })
       .catch(error => {
         console.error(error);
         setIsLoading(false); 
       });
+    }
   }, []);
   return {dataProduk, isLoading};
 };
+
 
 const highlight = (text) => {
   return text.split(';');
@@ -185,6 +194,6 @@ const submitData  = (item,qty) =>{
 export { url, 
   setLocalStorageWithTimeout, 
   userData, boolUser, 
-  GetCart, GetId_Order, GetOrderDetail,
+  GetCart,GetId_Order, GetOrderDetail,
   GetData,GetProduk,GetUser,
   highlight, GetIdCart,deskripsi, submitData};
