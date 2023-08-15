@@ -936,7 +936,7 @@ const Order = () =>{
           
         </Row>
         <Row className="mt-4">
-          {notes !== "Dalam Perjalanan" && userData[0].tipe !== "admin" ?<Col><button className="btn btn-lg mt-3" style={{width:"100%", marginBottom:30, backgroundColor:"#78CF81"}} onClick={userData[0].tipe === "user" ? handleUpload : handleConfirm}>{userData[0].tipe === "user" ? "Upload" : "Update Status"}</button></Col> : ""}
+          {notes !== "Dalam Perjalanan" || userData[0].tipe === "admin" ?<Col><button className="btn btn-lg mt-3" style={{width:"100%", marginBottom:30, backgroundColor:"#78CF81"}} onClick={userData[0].tipe === "user" ? handleUpload : handleConfirm}>{userData[0].tipe === "user" ? "Upload" : "Update Status"}</button></Col> : ""}
         </Row>
         </Container>
 
