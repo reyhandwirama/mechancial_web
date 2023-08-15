@@ -32,6 +32,9 @@ function Cart(){
     
   }
 
+  if(userData && userData[0].tipe === "admin"){
+    return <Navigate replace={true} to='/admin' />
+  }
   const handleClose = () =>{
     setShowWarning(false);
     navigate('/profile');
@@ -502,12 +505,12 @@ const Order = () =>{
   const [kurir, setKurir] = useState("");
   const [notes, setNotes] = useState("");
   const [ongkir, setOngkir] = useState();
+  const [alamat, setAlamat] = useState("");
   const [batasorder,setBatasOrder] = useState("");
   const [showWarning, setShowWarning] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
   const [image, setImage] = useState();
   const [prev_image, setPrev_Image] = useState();
-  const dataUser = GetUser();
   let status;
   let title;
   let total_belanja =0;
@@ -519,6 +522,7 @@ const Order = () =>{
       setNotes(dataOrder.filter((item) => item.Id_Order === id_order)[0].status);
       setOngkir(dataOrder.filter((item) => item.Id_Order === id_order)[0].ongkir);
       setPrev_Image(dataOrder.filter((item) => item.Id_Order === id_order)[0].dataImage);
+      setAlamat(dataOrder.filter((item) => item.Id_Order === id_order)[0].Alamat);
     }
   },[dataOrder, noresi,id_order,kurir,notes,ongkir]);
 
@@ -570,16 +574,20 @@ const Order = () =>{
     setNoresi(event.target.value);
   };
 
+  const handleAlamat = (event) =>{
+    setAlamat(event.target.value);
+  }
+    
   const handleKurir = (event) => {
-    if(kurir ===""){
+    setKurir(event.target.value);
+    if(event.target.value ===""){
       setNotes("Proses Ongkir");
     }
     else{
-      if(kurir !== "" || ongkir!== 0){
+      if(event.target.value !== "" || ongkir!== 0 ){
         setNotes("Dalam Perjalanan");
       }
     }
-    setKurir(event.target.value);
   };
 
   const handleOngkir = (event) => {
@@ -665,11 +673,12 @@ const Order = () =>{
         axios.post(`${url}/updateOrder`, data)
           .then(response => {
               console.log('Data submitted successfully');
+              alert("Data Berhasil di Update")
               // Perform any additional actions if needed
 
           })
           .catch(error => {
-              alert("Username dan Password salah !")
+              alert("Data Gagal Di Update")
           });
       }
   }
@@ -781,11 +790,11 @@ const Order = () =>{
                 <Col>
                 <Link style={{textDecoration: 'none', color:"black"}} to={`/profile/order`}><button className="btn btn-lg bg-warning">&laquo;</button>   </Link>
                 </Col>
-                {dataOrder.length > 0 && new Date(dataOrder.filter((item) => item.Id_Order === id_order)[0].batasorder).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta'}) !== "1/1/1970, 07.00.00"&&(
+                {dataOrder.length > 0 && new Date(dataOrder.filter((item) => item.Id_Order === id_order)[0].batasorder).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta'}) !== "1/1/1970, 07.00.00"  && new Date(dataOrder.filter((item) => item.Id_Order === id_order)[0].batasorder).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta'}) !== "Invalid Date" ?(
                 <Col md={4} style={{padding:10, backgroundColor:"#f44336", color:"white", borderRadius:10}}>
                     batas Pembayaran : {new Date(dataOrder.filter((item) => item.Id_Order === id_order)[0].batasorder).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta'})} WIB
                 </Col>
-                )}
+                ) : ""}
                 </Row>
       
         <Col className="">
@@ -799,11 +808,22 @@ const Order = () =>{
         <Row className="d-flex justify-content-between flex-column p-0">
                 <Row>
                   {userData[0].tipe === "user" ? 
+                    (notes === "Alamat Tidak Lengkap" ?
+                    <div>
+                    <label htmlFor="alamat" style={{width:"100%", marginTop:10}}>Alamat</label>
+                      <input
+                      type="text"
+                      id="noresi"
+                      value={alamat}
+                      onChange={handleAlamat}
+                      style={{width:"100%", marginTop:10}} />
+                      </div>
+                      :
                     <Col className="p-3">
                       <p>TRANSFER BANK BCA</p>
                       <p>No Rek : 1923834757</p>
                       <p>A/N Muhammad Reyhan Dwi Rama</p>
-                    </Col>
+                    </Col>)
                    : 
                    <div>
                    <Col className="p-3">
@@ -813,16 +833,16 @@ const Order = () =>{
                       id="ongkir"
                       value={ongkir}
                       onChange={handleOngkir}
-                      style={{width:"100%", marginTop:10}} />
+                      style={{width:"100%", marginTop:10}} readOnly={notes === "Dalam Perjalanan" ? true : false}/>
                       <label htmlFor="noresi" style={{width:"100%", marginTop:10}}>No_Resi</label>
                       <input
                       type="text"
                       id="noresi"
                       value={noresi}
                       onChange={handleNoresi}
-                      style={{width:"100%", marginTop:10}} />
+                      style={{width:"100%", marginTop:10}} readOnly={notes === "Dalam Perjalanan" ? true : false}/>
                       <label htmlFor="kurir" style={{marginTop:20}}>Kurir</label>
-                      <select id="kurir" value={kurir} onChange={handleKurir}  style={{width:"100%", marginTop:10}}>
+                      <select id="kurir" value={kurir} onChange={handleKurir}  style={{width:"100%", marginTop:10}} disabled={notes === "Dalam Perjalanan" ? "disabled" : ""}>
                       <option value="">Select an option</option>
                       {option.map((option) => (
                         <option key={option.value} value={option.value}>
@@ -831,7 +851,7 @@ const Order = () =>{
                       ))}
                       </select>
                       <label htmlFor="notes" style={{marginTop:20}}>Notes</label>
-                      <select id="notes" value={notes} onChange={handleNotes}  style={{width:"100%", marginTop:10}}>
+                      <select id="notes" value={notes} onChange={handleNotes}  style={{width:"100%", marginTop:10}} disabled={notes === "Dalam Perjalanan" ? "disabled" : ""}>
                       <option value="">Select an option</option>
                       {option1.map((option) => (
                         <option key={option.value} value={option.value}>
@@ -841,7 +861,7 @@ const Order = () =>{
                       </select>
                     </Col>
                     <Col>
-                    <p>{`Alamat : ${dataUser.length > 0 && dataUser.filter((data) => data.Id_User === dataOrder.filter((item) => item.Id_Order === id_order)[0].Id_User)[0].alamat}`}</p>
+                    <p>{`Alamat : ${alamat}`}</p>
                 </Col>
                     </div>
                    }
@@ -900,7 +920,7 @@ const Order = () =>{
             ))}
         </Row>
         ))}
-        {userData && userData[0].tipe!== "admin" ?(
+        {userData && userData[0].tipe!== "admin" && (notes === "Belum Dibayar" || notes ==="Pembayaran Tidak Sesuai") ?(
         <Row style={{marginTop:20}}>
           <h4 style={{marginBottom:20}}>Upload Bukti Pembayaran</h4>
           <input type="file" name="file" accept="image/*" onChange={handleImage}/>
@@ -912,7 +932,7 @@ const Order = () =>{
           
         </Row>
         <Row className="mt-4">
-          <Col><button className="btn btn-lg mt-3" style={{width:"100%", marginBottom:30, backgroundColor:"#78CF81"}} onClick={userData[0].tipe === "user" ? handleUpload : handleConfirm}>{userData[0].tipe === "user" ? "Order" : "Update Status"}</button></Col>
+          <Col><button className="btn btn-lg mt-3" style={{width:"100%", marginBottom:30, backgroundColor:"#78CF81"}} onClick={userData[0].tipe === "user" ? handleUpload : handleConfirm}>{userData[0].tipe === "user" ? "Upload" : "Update Status"}</button></Col>
         </Row>
         </Container>
 

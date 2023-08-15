@@ -1,9 +1,11 @@
 import React from "react"
 import { Card, Image, Col, Row, Container } from "react-bootstrap";
-import { Link} from "react-router-dom";
-import { GetProduk, highlight, url} from "./global";
+import { Link, Navigate} from "react-router-dom";
+import { GetProduk, highlight,userData} from "./global";
 function Home(){
-    
+    if(userData && userData[0].tipe === "admin"){
+        return <Navigate replace={true} to='/admin' />
+      }
     return (
       <React.Fragment>
       <Cards category={"fullkit"}/>

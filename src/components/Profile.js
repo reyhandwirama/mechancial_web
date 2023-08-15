@@ -4,6 +4,7 @@ import { GetId_Order, GetOrderDetail,GetUser, GetProduk, boolUser,highlight,setL
 import { Link,useNavigate, Navigate} from "react-router-dom";
 import axios from "axios";
 function Profile(){
+    
     setLocalStorageWithTimeout();
     const navigate = useNavigate();
     const [kondisi, setKondisi] = useState('profile');
@@ -11,7 +12,9 @@ function Profile(){
         setKondisi(value)
         
     }
-    
+    if(userData && userData[0].tipe === "admin"){
+        return <Navigate replace={true} to='/admin' />
+    }
     const handleLogout= () =>{
         localStorage.removeItem('user');
         navigate("/profile/login")
@@ -20,7 +23,68 @@ function Profile(){
     }
     if(!userData){
         return <Navigate to={"/profile/login"}/>
+    }    
+      const handleUpdate = (username,email,notelp,password,alamat) =>{
+            updateDataProfile(userData[0].Id_User,username,email,notelp,password,alamat);
+      }
+      if (userData[0].tipe === "user"){
+        return(
+            <Container style={{padding:50,backgroundColor:"#F5F5F5",marginTop:50, marginBottom:50}}>
+                <Row>
+                    <Col className="d-flex flex-column " md={3}>
+                    <button className="btn btn-lg mt-3" style={{width:"100%", backgroundColor:"#787872", color:"white",fontWeight:"bold"}} onClick={() => handleKondisi('profile')}>Update Profile</button>
+                    <button className="btn btn-lg mt-3" style={{width:"100%", backgroundColor:"#787872", color:"white",fontWeight:"bold"}} onClick={() => handleKondisi('order')}>My Order</button>
+                    <Link to={'/profile/login'}>
+                    <button className="btn btn-lg mt-3" style={{width:"100%", backgroundColor:"#f44336", color:"white",fontWeight:"bold"}} onClick={() => handleLogout()}>Log Out</button>
+                    </Link>
+                    </Col>
+                    <Col>
+                        {kondisi === "profile"?  <FormProfile value={kondisi} onChanges={handleUpdate} /> : <Order/>}
+                        
+                    </Col>
+                </Row>
+            </Container>
+        ) }
+    else{
+        return(
+        <Container style={{padding:50,backgroundColor:"#F5F5F5",marginTop:50, marginBottom:50}}>
+            <Row>
+                <Col className="d-flex flex-column " md={3}>
+                <button className="btn btn-lg mt-3" style={{width:"100%", backgroundColor:"#787872", color:"white",fontWeight:"bold"}}>Order Detail</button>
+                <Link to={'/profile/login'}>
+                <button className="btn btn-lg mt-3" style={{width:"100%", backgroundColor:"#f44336", color:"white",fontWeight:"bold"}} onClick={() => handleLogout()}>Log Out</button>
+                </Link>
+                </Col>
+                <Col>
+                    <Order/>
+                    
+                </Col>
+            </Row>
+        </Container>
+    )}
+}
+
+function ProfileAdmin(){
+    setLocalStorageWithTimeout();
+    const navigate = useNavigate();
+    const [kondisi, setKondisi] = useState('profile');
+    const handleKondisi = (value) =>{
+        setKondisi(value)
+        
     }
+    
+    if(userData && userData[0].tipe === "user"){
+        return <Navigate replace={true} to='/profile' />
+    }
+    const handleLogout= () =>{
+        localStorage.removeItem('user');
+        navigate("/profile/login")
+        window.location.reload();
+        
+    }
+    if(!userData){
+        return <Navigate to={"/profile/login"}/>
+    }    
       const handleUpdate = (username,email,notelp,password,alamat) =>{
             updateDataProfile(userData[0].Id_User,username,email,notelp,password,alamat);
       }
@@ -69,6 +133,9 @@ function ProfileOrder(){
         setKondisi(value)
     }
     
+    if(userData && userData[0].tipe === "admin"){
+        return <Navigate replace={true} to='/admin' />
+    }
     const handleLogout= () =>{
         localStorage.removeItem('user');
         navigate("/profile/login")
@@ -177,7 +244,7 @@ function Order(){
         {(userData[0].tipe === "admin" ? dataOrder:dataOrder.filter((item) => item.Id_User === userData[0].Id_User)).map((item) =>(
         <Container fluid className="p-4" style={{transform:"scale(0.9)", backgroundColor:"white", borderRadius:10}}>
         <Link style={{textDecoration: 'none', color:"black"}} to={`/order/${item.Id_Order}`}>
-        {new Date(item.batasorder).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta'}) !== "1/1/1970, 07.00.00" &&(
+        {new Date(item.batasorder).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta'}) !== "1/1/1970, 07.00.00" && new Date(item.batasorder).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta'}) !== "Invalid Date" ?(
         <Row>
                 <Col>
                 </Col>
@@ -185,11 +252,12 @@ function Order(){
                     batas Pembayaran : {new Date(item.batasorder).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta'})}
                 </Col>
                 </Row>
-        )}
+        ): ""}
         <Row style={{marginTop:20}}>
                 <Col md={6}>
                     <p>{`No_Resi : ${item.noresi}`}</p>
                     <p>{`Kurir : ${item.kurir}`}</p>
+                    <p>{`Biaya Ongkir : Rp ${item.ongkir.toLocaleString()}`}</p>
                     <p>{`Alamat : ${item.Alamat}`}</p>
                 </Col>
                 <Col md={6}>
@@ -239,7 +307,7 @@ function Order(){
                     <div className="d-flex align-items-center flex-column">
                     <h4><strong>Total Belanja</strong></h4>
                     {dataOrderDetail.filter((items) => items.Id_Order === item.Id_Order).slice(0,1).map((item1)=>(
-                    <h4>{`Rp ${item1.Ttl_Belanja.toLocaleString()}`}</h4>
+                    <h4>{`Rp ${(item1.Ttl_Belanja + item.ongkir).toLocaleString()}`}</h4>
                     ))}
                     </div>
                     </Container>
@@ -305,13 +373,17 @@ function Formsubmit(nilai){
 }
 
 function FormLogin(){
-    const navigate = useNavigate();
     const [usernamelog, setUsernameLog] = useState('');
     const [passwordlog, setPasswordLog] = useState('');
     const {dataUser} = GetUser();
 
     if(userData){
-        navigate("/profile");
+        if(userData && userData[0].tipe === "user"){
+            return <Navigate replace={true} to='/profile' />
+        }
+        else{
+            return <Navigate replace={true} to='/admin' />
+        }
     }
     const handlePasswordLogChange = (event) => {
         setPasswordLog(event.target.value);
@@ -662,4 +734,4 @@ const updateDataProfile = (id_user,username,email,notelp,password,alamat) =>{
         console.log('data gagal di update',error);
   });
 };
-export{Login, Profile,ProfileOrder}
+export{Login, Profile,ProfileOrder, ProfileAdmin}
