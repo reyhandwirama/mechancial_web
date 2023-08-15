@@ -614,8 +614,8 @@ const Order = () =>{
     if(notes === "" || notes === "Dalam Perjalanan"){
       setNotes("Dalam Perjalanan")
     }
-    if (!image) {
-      alert("Silahkan Input foto !");
+    if (!image && notes !== "Alamat Tidak Lengkap") {
+      alert("Silahkan Input fotox !");
       return;
     }
     else{
@@ -633,13 +633,17 @@ const Order = () =>{
         const imageRef = storageRef.child(`images/${filename}`);
         await imageRef.put(image);
         const imageUrl = await imageRef.getDownloadURL();
+        
         const data = {
           Id_Order: id_order,
           Prev_Image:imageUrl,
+          Alamat:alamat,
+          Notes : notes === "Alamat Tidak Lengkap" ? "Proses Ongkir" : "Sedang Diproses",
         }
         try{
           await axios.post(`${url}/api/upload`,data);
           console.log('Image uploaded successfully!');
+          alert("Data Berhasil Di Upload !")
           window.location.reload();
         } catch(error){
           console.error('Error uploading the image',error);
@@ -851,7 +855,7 @@ const Order = () =>{
                       ))}
                       </select>
                       <label htmlFor="notes" style={{marginTop:20}}>Notes</label>
-                      <select id="notes" value={notes} onChange={handleNotes}  style={{width:"100%", marginTop:10}} disabled={notes === "Dalam Perjalanan" ? "disabled" : ""}>
+                      <select id="notes" value={notes} onChange={handleNotes}  style={{width:"100%", marginTop:10}}>
                       <option value="">Select an option</option>
                       {option1.map((option) => (
                         <option key={option.value} value={option.value}>
@@ -932,7 +936,7 @@ const Order = () =>{
           
         </Row>
         <Row className="mt-4">
-          <Col><button className="btn btn-lg mt-3" style={{width:"100%", marginBottom:30, backgroundColor:"#78CF81"}} onClick={userData[0].tipe === "user" ? handleUpload : handleConfirm}>{userData[0].tipe === "user" ? "Upload" : "Update Status"}</button></Col>
+          {notes !== "Dalam Perjalanan" && userData[0].tipe !== "admin" ?<Col><button className="btn btn-lg mt-3" style={{width:"100%", marginBottom:30, backgroundColor:"#78CF81"}} onClick={userData[0].tipe === "user" ? handleUpload : handleConfirm}>{userData[0].tipe === "user" ? "Upload" : "Update Status"}</button></Col> : ""}
         </Row>
         </Container>
 
