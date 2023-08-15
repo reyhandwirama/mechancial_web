@@ -48,7 +48,7 @@ function Cart(){
 
     return(
         <React.Fragment>
-        {dataCartDetail.filter(item => item.Id_Cart === userData[0].Id_Cart).map((item)=>(
+        {dataCartDetail && dataCartDetail.filter(item => item.Id_Cart === userData[0].Id_Cart).map((item)=>(
         <Container className="p-5 border-bottom border-dark border-1">
             {dataProduk.filter(item1 => item1.Id_Product === item.Id_Product).map((item1)=> (
                 <p style={{display:"none"}}>{total_belanja = total_belanja + (item.Qty * item1.price)}</p>
@@ -231,8 +231,21 @@ function ButtonIncreaseCart({value}){
   };
   
   const handleRemove = () => {
-    submitRemove(value[1], value[2]);
-    window.location.reload();
+    const data = {
+        Id_User : value[1],
+        Id_Produk : value[2],
+    };
+
+    axios.post(`${url}/remover`, data)
+    .then(response => {
+        console.log('Data Succesfully Removed');
+        window.location.reload();
+        // Perform any additional actions if needed
+    })
+    .catch(error => {
+        console.error('Error submitting data:', error);
+        window.location.reload();
+  });
   };
   
   // This useEffect hook will be triggered whenever 'count' changes
@@ -292,21 +305,6 @@ const submitData  = (count,user, produk) =>{
   });
 };
 
-const submitRemove  = (user, produk) =>{
-    const data = {
-        Id_User : user,
-        Id_Produk : produk,
-    };
-
-    axios.post(`${url}/remover`, data)
-    .then(response => {
-        console.log('Data Succesfully Removed');
-        // Perform any additional actions if needed
-    })
-    .catch(error => {
-        console.error('Error submitting data:', error);
-  });
-};
 
 const ShowCheckout =() =>{
 
@@ -321,17 +319,27 @@ const ShowCheckout =() =>{
 const Checkout =() =>{
   const navigate = useNavigate();
   let total_belanja = 0;
+  const [isLoading1 , setIsLoading] = useState(false);
   const {dataCartDetail} = GetCart();
-  const {dataProduk,isLoading} = GetProduk();
-  const {dataUser} = GetUser();
+  const {dataProduk} = GetProduk();
+  const {dataUser,isLoading} = GetUser();
   const [showWarning, setShowWarning] = useState(false);
+  const [alamat, setAlamat] = useState("");
 
+  useEffect(()=>{
+    if (!alamat){
+      setAlamat(dataUser.length > 0 &&dataUser.filter((item) => item.Id_User === userData[0].Id_User)[0].alamat)
+    }
+  })
   useEffect(() => {
     if (!boolUser) {
       return <Navigate to={"/profile/login"} replace={true}/>
     }
   }, [navigate]);
 
+  const handleAlamatChange = (event) =>{
+    setAlamat(event.target.value);
+  }
   // Check if still loading
   const handleConfirmOrder =(props) =>{
         
@@ -341,8 +349,26 @@ const Checkout =() =>{
         dataCartDetail.filter((item) => item.Id_User === userData[0].Id_User ).map((item) =>(
           submitOrder(id_order,userData[0].Id_User,item.Id_Product,item.Qty,props)
         ));
-        navigate("/profile/order")
-        window.location.reload();
+        setIsLoading(true);
+        const data = {
+          Id_Order: id_order,
+          Id_User : userData[0].Id_User,
+          Alamat : alamat,
+    
+        };
+          axios.post(`${url}/orders`, data)
+          .then(response => {
+              console.response('Data submitted successfully');
+              setIsLoading(false);
+              navigate("/profile/order")
+              // Perform any additional actions if needed
+          })
+          .catch(error => {
+              console.error('Error submitting data:', error);
+              setIsLoading(false);
+              navigate("/profile/order")
+        });
+        
     }
 
     const handleOrder =() =>{
@@ -355,6 +381,13 @@ const Checkout =() =>{
 
 
     if (isLoading) {
+      return (
+        <div className="spinner-container">
+        <div className="loading-spinner"></div>
+      </div>
+      )
+    }
+    if (isLoading1) {
       return (
         <div className="spinner-container">
         <div className="loading-spinner"></div>
@@ -374,8 +407,14 @@ const Checkout =() =>{
         <Row className="p-0">
           <p><strong>{`${userData[0].username.toUpperCase()} `}</strong>{`${userData[0].notelp}`}</p>
         </Row>
-          <p>{dataUser.length > 0 &&dataUser.filter((item) => item.Id_User === userData[0].Id_User)[0].alamat}</p>
-
+        <Row>
+          <input
+                    type="text"
+                    id="alamat"
+                    value={alamat}
+                    onChange={handleAlamatChange}
+                    style={{width:"100%", marginTop:10}}/>
+        </Row>
         {dataCartDetail.filter((item) => item.Id_User === userData[0].Id_User).map((item)=> (
             <Row className="mt-1 border-bottom d-flex justify-content-end">
               {dataProduk.filter((items) => items.Id_Product === item.Id_Product ).map((item1)=> (
@@ -540,7 +579,6 @@ const Order = () =>{
         setNotes("Dalam Perjalanan");
       }
     }
-    
     setKurir(event.target.value);
   };
 
@@ -548,10 +586,12 @@ const Order = () =>{
     if(ongkir !== null || ongkir !== 0){
       setNotes("Belum Dibayar");
     }
-    setOngkir(event.target.value);
+    
     if(ongkir.length<=1){
       setNotes("Proses Ongkir");
     }
+    console.log(event.target.value);
+    setOngkir(event.target.value);
   };
 
   const handleNotes= (event) => {
@@ -625,7 +665,6 @@ const Order = () =>{
         axios.post(`${url}/updateOrder`, data)
           .then(response => {
               console.log('Data submitted successfully');
-              window.location.reload();
               // Perform any additional actions if needed
 
           })
@@ -742,7 +781,7 @@ const Order = () =>{
                 <Col>
                 <Link style={{textDecoration: 'none', color:"black"}} to={`/profile/order`}><button className="btn btn-lg bg-warning">&laquo;</button>   </Link>
                 </Col>
-                {dataOrder.length > 0 && new Date(dataOrder.filter((item) => item.Id_Order === id_order)[0].batasorder).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta'}) !== "Invalid Date"&&(
+                {dataOrder.length > 0 && new Date(dataOrder.filter((item) => item.Id_Order === id_order)[0].batasorder).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta'}) !== "1/1/1970, 07.00.00"&&(
                 <Col md={4} style={{padding:10, backgroundColor:"#f44336", color:"white", borderRadius:10}}>
                     batas Pembayaran : {new Date(dataOrder.filter((item) => item.Id_Order === id_order)[0].batasorder).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta'})} WIB
                 </Col>
@@ -770,7 +809,7 @@ const Order = () =>{
                    <Col className="p-3">
                    <label htmlFor="ongkir">Ongkir</label>
                       <input
-                      type="number"
+                      type="text"
                       id="ongkir"
                       value={ongkir}
                       onChange={handleOngkir}
@@ -923,11 +962,11 @@ const submitOrder  = (id_order,id_user,id_product,qty,props) =>{
   axios.post(`${url}/order`, data)
   .then(response => {
       console.log('Data submitted successfully');
-      return true
       // Perform any additional actions if needed
   })
   .catch(error => {
       console.error('Error submitting data:', error);
 });
 };
+
 export {Cart,ButtonIncrease,ShowCheckout, Order}

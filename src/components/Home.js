@@ -4,7 +4,6 @@ import { Link} from "react-router-dom";
 import { GetProduk, highlight, url} from "./global";
 function Home(){
     
-    console.log(url);
     return (
       <React.Fragment>
       <Cards category={"fullkit"}/>

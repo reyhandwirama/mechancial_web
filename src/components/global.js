@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const url = "https://delightful-lamb-jodhpurs.cyclic.app  ";
+const url = "https://delightful-lamb-jodhpurs.cyclic.app";
 const userData = JSON.parse(localStorage.getItem("user"));
 const boolUser = !!localStorage.getItem('user');
 
@@ -14,6 +14,7 @@ const GetUser = () => {
     axios.get(`${url}/user`)
       .then(response => {
         setDataUser(response.data);
+        localStorage.setItem("getuser",JSON.stringify(response.data));
         setIsLoading(false);
       })
       .catch(error => {
@@ -28,6 +29,7 @@ const GetUser = () => {
 const GetId_Order = () => {
   const [dataOrder, setDataOrder] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  
   useEffect(() => {
     // Fetch data from the API using Axios
     axios.get(`${url}/getId_Order`)
@@ -167,7 +169,7 @@ const GetIdCart = () =>{
     };
 }
 
-const submitData  = (item,qty) =>{
+const submitData  = (item,qty,berat) =>{
   const data1 = JSON.parse(localStorage.getItem("user"));
   console.log(data1[0].Id_Cart);
   const data = {
@@ -175,6 +177,7 @@ const submitData  = (item,qty) =>{
       Qty : qty,
       Id_User: data1[0].Id_User ,
       Id_Product: item.Id_Product,
+      Berat : berat,
   };
 
   axios.post(`${url}/checkout`, data)

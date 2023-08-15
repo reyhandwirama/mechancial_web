@@ -27,9 +27,9 @@ function Detail(){
         setQty(count);
     }
 
-    const handleCheckout = (item,qty) =>{
+    const handleCheckout = (item,qty,berat) =>{
         if(userData){
-        submitData(item,qty);
+        submitData(item,qty,berat);
         alert("Barang Berhasil Dimasukkan Ke Keranjang")
         }
         else{
@@ -49,7 +49,7 @@ function Detail(){
                     <Row><h2>{item.title}</h2></Row>
                     <Row>
                         <p>Rp {item.price.toLocaleString()}</p>
-                        <p>65% Keys Hot-swap RGB 2 Connection Mechanical Keyboard</p>
+                        <p>{item.summary}</p>
                         <ul style={{listStylePosition:"inside"}}>
                             {highlight(item.highlight).map ((item,index)=> (
                             <li key={index} style={{marginTop:5}}>{item}</li>

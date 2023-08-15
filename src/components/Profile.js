@@ -100,11 +100,10 @@ function ProfileOrder(){
         ) 
 }
 function Order(){
-    const navigate = useNavigate();
-    const {dataUser, isLoading} = GetUser();
+    const [isLoading1 , setIsLoading] = useState(false);
     const {dataProduk} = GetProduk();
     const {dataOrder} = GetId_Order();
-    const {dataOrderDetail} = GetOrderDetail();
+    const {dataOrderDetail, isLoading} = GetOrderDetail();
     const [showWarning, setShowWarning] = useState(false);
     const [idOrder, setIdOrder] = useState('');
 
@@ -127,7 +126,7 @@ function Order(){
             return "bg-info"
         }
       }
-      if (isLoading) {
+      if (isLoading || isLoading1) {
         return (
           <div className="spinner-container">
           <div className="loading-spinner"></div>
@@ -150,19 +149,23 @@ function Order(){
     
       const handleConfirmCancel = () =>{
         setShowWarning(false);
+        setIsLoading(true);
         const data = {
           Id_Order : idOrder,
         }
         axios.post(`${url}/removeOrder`,data)
         .then(response =>{
           console.log('Data Removed');
+          window.location.reload();
         })
         .catch(error =>{
           console.log("gagal remove");
+          alert("Gagal Remove !")
+        window.location.reload();
+        
         })
     
-        navigate("/profile/order")
-        window.location.reload();
+        setIsLoading(false);
       }
     
     const handleClose = () =>{
@@ -174,7 +177,7 @@ function Order(){
         {(userData[0].tipe === "admin" ? dataOrder:dataOrder.filter((item) => item.Id_User === userData[0].Id_User)).map((item) =>(
         <Container fluid className="p-4" style={{transform:"scale(0.9)", backgroundColor:"white", borderRadius:10}}>
         <Link style={{textDecoration: 'none', color:"black"}} to={`/order/${item.Id_Order}`}>
-        {new Date(item.batasorder).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta'}) !== "Invalid Date" &&(
+        {new Date(item.batasorder).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta'}) !== "1/1/1970, 07.00.00" &&(
         <Row>
                 <Col>
                 </Col>
@@ -184,10 +187,10 @@ function Order(){
                 </Row>
         )}
         <Row style={{marginTop:20}}>
-                <Col>
+                <Col md={6}>
                     <p>{`No_Resi : ${item.noresi}`}</p>
                     <p>{`Kurir : ${item.kurir}`}</p>
-                    <p>{`Alamat : ${dataUser.filter((data) => data.Id_User === item.Id_User)[0].alamat}`}</p>
+                    <p>{`Alamat : ${item.Alamat}`}</p>
                 </Col>
                 <Col md={6}>
                 <Row>
