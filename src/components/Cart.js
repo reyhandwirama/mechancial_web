@@ -411,8 +411,7 @@ const Checkout =() =>{
           <p><strong>{`${userData[0].username.toUpperCase()} `}</strong>{`${userData[0].notelp}`}</p>
         </Row>
         <Row>
-          <input
-                    type="text"
+          <textarea
                     id="alamat"
                     value={alamat}
                     onChange={handleAlamatChange}
