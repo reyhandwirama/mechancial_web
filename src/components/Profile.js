@@ -314,7 +314,7 @@ function Order(){
                 </Row>
             </Row>
         </Link>
-        {item.status !== "Dalam Perjalanan" &&(<Col md={4} className="ms-auto"><button className="btn btn-lg mt-3" style={{width:"100%", marginBottom:30, backgroundColor:"#f44336"}} onClick={() => handleCancel(item.Id_Order)}>Cancel Order</button></Col>)}
+        {(item.status !== "Dalam Perjalanan" && item.status !== "Pesanan Telah Sampai") &&(<Col md={4} className="ms-auto"><button className="btn btn-lg mt-3" style={{width:"100%", marginBottom:30, backgroundColor:"#f44336"}} onClick={() => handleCancel(item.Id_Order)}>Cancel Order</button></Col>)}
         </Container>
 ))}
     <Modal show={showWarning} onHide={handleClose}>
