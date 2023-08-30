@@ -719,7 +719,7 @@ const Order = () =>{
       console.log("gagal remove");
     })
 
-    navigate("/profile")
+    navigate("/profile/order")
   }
 
   const background =(value) =>{
