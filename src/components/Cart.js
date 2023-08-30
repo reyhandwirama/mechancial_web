@@ -96,10 +96,10 @@ function Cart(){
         </Container>
         ))}
 
-        {showButton ? (
+       {showButton ? (
           <React.Fragment>
-          <Container fluid className="d-flex justify-content-end mt-5" style={{marginLeft:40}}>
-          <div className="col-5 d-flex align-items-center flex-column">
+          <Container className="d-flex justify-content-end mt-5">
+          <div className="d-flex align-items-center flex-column" style={{marginRight:"60px"}}>
           <h4><strong>Total Belanja</strong></h4>
           <h4>Rp {total_belanja.toLocaleString()}</h4>
           </div>
