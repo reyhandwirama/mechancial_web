@@ -379,7 +379,7 @@ function FormLogin(){
 
     if(userData){
         if(userData && userData[0].tipe === "user"){
-            return <Navigate replace={true} to='/profile' />
+            return <Navigate replace={true} to='/' />
         }
         else{
             return <Navigate replace={true} to='/admin' />
