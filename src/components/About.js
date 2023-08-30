@@ -4,7 +4,7 @@ import React from "react"
 export default function About(){
     return(
         <React.Fragment>
-        <Container fluid className="p-0">
+        <Container fluid>
             <Row>
                 <div className="atas" style={{height:200}}></div>
             </Row>
